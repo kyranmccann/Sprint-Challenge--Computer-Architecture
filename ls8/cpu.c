@@ -109,6 +109,7 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char registersA, unsigned cha
     cpu -> registers[registersA] += cpu -> registers[registersB];
     break;
 
+
     case ALU_CMP:
       if (cpu -> registers[registersA] == cpu -> registers[registersB])
       {
@@ -123,6 +124,44 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char registersA, unsigned cha
         cpu -> FL = 0x02;
       }
       break;
+
+      case ALU_AND:
+        cpu -> registers[registersA] = cpu -> registers[registersA] & cpu -> registers[registersB];
+        break;
+
+      case ALU_OR:
+        cpu -> registers[registersA] = cpu -> registers[registersA] | cpu -> registers[registersB];
+        break;
+
+      case ALU_XOR:
+        cpu -> registers[registersA] = cpu -> registers[registersA] ^ cpu -> registers[registersB];
+        break;
+
+      case ALU_NOT:
+        cpu -> registers[registersA] = ~cpu -> registers[registersA];
+        break;
+
+        //shift left
+      case ALU_SHL:
+        cpu -> registers[registersA] = cpu -> registers[registersA] << cpu -> registers[registersB];
+        break;
+
+        //shift right
+      case ALU SHR:
+        cpu -> registers[registersA] = cpu -> registers[registersA] >> cpu -> registers[registersB];
+        break;
+
+      case ALU_MOD:
+        if (cpu -> registers[registersA] == 0)
+        {
+          printf("You trying to divide by zero though?\n");
+        }
+        else
+        {
+          cpu -> registers[registerA] = cpu -> registers[registersA] % cpu -> registers[registersB];
+        }
+        break;
+
   }
 }
 
@@ -302,7 +341,10 @@ void cpu_run(struct cpu *cpu)
     }
 
     // 6. Move the PC to the next instruction.
-    if ((IR & 0x10) != 0x10) { cpu->PC += (ops + 1); } 
+    if ((IR & 0x10) != 0x10)
+    {
+      cpu -> PC += (ops + 1);
+    }
   }
 }
 
