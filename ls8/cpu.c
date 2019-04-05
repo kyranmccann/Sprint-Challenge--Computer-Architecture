@@ -189,6 +189,19 @@ void JMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
   cpu -> PC = cpu -> registers[opA];
 }
 
+void JEQ_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  void(opB);
+  if (cpu -> FL == 1)
+  {
+    cpu -> PC = cpu -> registers[opA];
+  }
+  else
+  {
+    cpu -> PC += 2;
+  }
+}
+
 /**
  * Run the CPU
  */
@@ -254,6 +267,7 @@ void cpu_run(struct cpu *cpu)
     handlers[PUSH] = PUSH_handler;
     handlers[CMP] = CMP_handler;
     handlers[JMP] = JMP_handler;
+    handlers[JEQ] = JEQ_handler;
 
     if (handlers[IR])
     {
