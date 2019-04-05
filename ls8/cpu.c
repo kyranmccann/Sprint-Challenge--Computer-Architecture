@@ -110,11 +110,11 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char registersA, unsigned cha
     break;
 
     case ALU_CMP:
-      if (registersA == registersB)
+      if (cpu -> registers[registersA] == cpu -> registers[registersB])
       {
         cpu -> FL = 0x01;
       }
-      else if (registersA < registersB)
+      else if (cpu -> registers[registersA] < cpu -> registers[registersB])
       {
         cpu -> FL = 0x04;
       }
@@ -180,7 +180,7 @@ void PUSH_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
 
 void CMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
 {
-  alu(cpu, ALU_CMP, opA, opB)
+  alu(cpu, ALU_CMP, opA, opB);
 }
 
 void JMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
@@ -191,7 +191,7 @@ void JMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
 
 void JEQ_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
 {
-  void(opB);
+  (void)opB;
   if (cpu -> FL == 1)
   {
     cpu -> PC = cpu -> registers[opA];
@@ -200,6 +200,27 @@ void JEQ_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
   {
     cpu -> PC += 2;
   }
+}
+
+void JNE_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  (void)opB;
+  if(cpu -> FL != 1)
+  {
+    cpu -> PC = cpu -> registers[opA];
+  }
+  else
+  {
+    cpu -> PC += 2;
+  }
+}
+
+void CALL_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  (void)opB;
+  cpu -> registers[7] -= 1;
+  cpu_ram_write(cpu, cpu -> registers[7], cpu -> PC + 2);
+  cpu -> PC = cpu -> registers[opA];
 }
 
 /**
@@ -268,6 +289,7 @@ void cpu_run(struct cpu *cpu)
     handlers[CMP] = CMP_handler;
     handlers[JMP] = JMP_handler;
     handlers[JEQ] = JEQ_handler;
+    handlers[JNE] = JNE_handler;
 
     if (handlers[IR])
     {
@@ -280,7 +302,7 @@ void cpu_run(struct cpu *cpu)
     }
 
     // 6. Move the PC to the next instruction.
-    cpu -> PC += (ops + 1);
+    if ((IR & 0x10) != 0x10) { cpu->PC += (ops + 1); } 
   }
 }
 
