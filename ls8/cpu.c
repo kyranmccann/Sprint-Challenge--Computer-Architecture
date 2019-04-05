@@ -178,9 +178,15 @@ void PUSH_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
   }
 }
 
-boid CMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+void CMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
 {
   alu(cpu, ALU_CMP, opA, opB)
+}
+
+void JMP_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  (void)opB;
+  cpu -> PC = cpu -> registers[opA];
 }
 
 /**
@@ -247,6 +253,7 @@ void cpu_run(struct cpu *cpu)
     handlers[POP] = POP_handler;
     handlers[PUSH] = PUSH_handler;
     handlers[CMP] = CMP_handler;
+    handlers[JMP] = JMP_handler;
 
     if (handlers[IR])
     {
