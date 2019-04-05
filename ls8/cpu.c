@@ -262,6 +262,40 @@ void CALL_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
   cpu -> PC = cpu -> registers[opA];
 }
 
+void AND_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_AND, opA, opB);
+}
+
+void OR_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_OR, opA, opB);
+}
+
+void XOR_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_XOR, opA, opB);
+}
+
+void NOT_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_NOT, opA, opB);
+}
+
+void SHL_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_SHL, opA, opB);
+}
+
+void SHR_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_SHR, opA, opB);
+}
+
+void MOD_handler(struct cpu *cpu, unsigned char opA, unsigned char opB)
+{
+  alu(cpu, ALU_MOD, opA, opB);
+}
 /**
  * Run the CPU
  */
