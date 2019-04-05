@@ -363,6 +363,13 @@ void cpu_run(struct cpu *cpu)
     handlers[JMP] = JMP_handler;
     handlers[JEQ] = JEQ_handler;
     handlers[JNE] = JNE_handler;
+    handlers[AND] = AND_handler;
+    handlers[OR] = OR_handler;
+    handlers[XOR] = XOR_handler;
+    handlers[NOT] = NOT_handler;
+    handlers[SHL] = SHL_handler;
+    handlers[SHR] = SHR_handler;
+    handlers[MOD] = MOD_handler;
 
     if (handlers[IR])
     {
